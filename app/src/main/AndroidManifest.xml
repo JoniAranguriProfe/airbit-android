@@ -13,7 +13,10 @@
         android:theme="@style/Theme.AirbIT"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".reservation.view.ReservationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".home.view.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
