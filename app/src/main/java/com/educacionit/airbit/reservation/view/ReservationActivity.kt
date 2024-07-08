@@ -14,6 +14,12 @@ class ReservationActivity : AppCompatActivity(), ReservationContract.Reservation
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservation)
         initPresenter()
+
+        configureViews()
+    }
+
+    private fun configureViews() {
+        // Todo: configure amenities recyclerview with adapter
     }
 
     override fun initPresenter() {

@@ -7,4 +7,271 @@
     android:layout_height="match_parent"
     tools:context=".reservation.view.ReservationActivity">
 
+    <ImageView
+        android:id="@+id/room_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/room_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0" />
+
+    <Button
+        android:id="@+id/backButton"
+        style="?attr/materialIconButtonFilledTonalStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        app:icon="@drawable/back_icon"
+        app:layout_constraintEnd_toStartOf="@+id/shareButton"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/shareButton"
+        style="?attr/materialIconButtonFilledTonalStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:icon="@drawable/share_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/backButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/reservation_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/room_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Elite Resort"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/room_location_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread_inside" />
+
+            <ImageView
+                android:id="@+id/location_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/location_icon"
+                app:layout_constraintBottom_toBottomOf="@+id/room_location_name"
+                app:layout_constraintEnd_toStartOf="@+id/room_location_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/room_location_name"
+                app:tint="@color/gray" />
+
+            <TextView
+                android:id="@+id/room_location_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Rome, Italy"
+                android:textColor="@color/gray"
+                app:layout_constraintBottom_toTopOf="@+id/room_rate"
+                app:layout_constraintEnd_toStartOf="@+id/card_price"
+                app:layout_constraintStart_toEndOf="@+id/location_icon"
+                app:layout_constraintTop_toBottomOf="@+id/room_title" />
+
+            <androidx.appcompat.widget.AppCompatRatingBar
+                android:id="@+id/room_rate"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:stepSize="0.1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/rating_label"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/room_location_name" />
+
+            <TextView
+                android:id="@+id/rating_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="4.8"
+                android:textColor="@color/gray"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/room_rate"
+                app:layout_constraintEnd_toStartOf="@+id/card_price"
+                app:layout_constraintStart_toEndOf="@+id/room_rate"
+                app:layout_constraintTop_toTopOf="@+id/room_rate" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/card_gray"
+                android:clipToOutline="false"
+                app:layout_constraintBottom_toBottomOf="@+id/room_rate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toEndOf="@id/room_location_name"
+                app:layout_constraintTop_toTopOf="@id/room_title">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/price_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hotel Rent"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/room_night_price"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/dollar_sign"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/room_night_price"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/price_title" />
+
+                    <TextView
+                        android:id="@+id/room_night_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="180"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/night_label"
+                        app:layout_constraintStart_toEndOf="@+id/dollar_sign"
+                        app:layout_constraintTop_toBottomOf="@+id/price_title" />
+
+                    <TextView
+                        android:id="@+id/night_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="/Night"
+                        android:textColor="@color/gray"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/room_night_price"
+                        app:layout_constraintTop_toBottomOf="@+id/price_title" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/room_amenities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal"
+                android:paddingVertical="10dp"
+                app:layout_constraintBottom_toTopOf="@+id/checkin_label"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/room_rate"/>
+
+            <TextView
+                android:id="@+id/checkin_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Check-in and Out"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/time_range_button"
+                app:layout_constraintEnd_toEndOf="@+id/time_range_button"
+                app:layout_constraintStart_toStartOf="@id/time_range_button"
+                app:layout_constraintTop_toBottomOf="@+id/room_amenities" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/time_range_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_marginEnd="5dp"
+                android:backgroundTint="@color/card_gray"
+                android:text="20 Sep - 21 Sep"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/map_card"
+                app:layout_constraintEnd_toStartOf="@+id/guests_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkin_label" />
+
+            <TextView
+                android:id="@+id/guest_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Guests"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/guests_button"
+                app:layout_constraintEnd_toEndOf="@+id/guests_button"
+                app:layout_constraintStart_toStartOf="@id/guests_button"
+                app:layout_constraintTop_toBottomOf="@id/room_amenities" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/guests_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_marginStart="5dp"
+                android:backgroundTint="@color/card_gray"
+                android:text="2 Adult"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@id/map_card"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/time_range_button"
+                app:layout_constraintTop_toBottomOf="@id/guest_label" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/map_card"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:backgroundTint="@color/gray"
+                app:layout_constraintBottom_toTopOf="@+id/reservation_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/guests_button"
+
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/reservation_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Book Room"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/map_card" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
