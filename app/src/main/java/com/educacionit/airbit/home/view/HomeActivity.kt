@@ -1,14 +1,14 @@
 package com.educacionit.airbit.home.view
 
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.educacionit.airbit.R
-import com.educacionit.airbit.home.contract.HomeContract
 import com.educacionit.airbit.entities.Room
+import com.educacionit.airbit.home.contract.HomeContract
 import com.educacionit.airbit.home.model.HomeRepository
 import com.educacionit.airbit.home.presenter.HomePresenterImpl
+import com.educacionit.airbit.reservation.view.ReservationActivity
 import com.google.android.gms.maps.model.LatLng
 
 class HomeActivity : AppCompatActivity(), HomeContract.HomeView {
@@ -18,6 +18,9 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView {
         setContentView(R.layout.activity_main)
 
         initPresenter()
+
+        val intent = Intent(this, ReservationActivity::class.java)
+        startActivity(intent)
     }
 
     override fun initPresenter() {
