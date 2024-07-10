@@ -5,4 +5,7 @@
     <string name="surfing">Surfing</string>
     <string name="national_parks">National parks</string>
     <string name="lakefront">Lakefront</string>
+
+    <!-- Google Maps-->
+    <string name="maps_api_key">AIzaSyC9xlVCzYEgvbAGbSe1ocfR0EJPFUdVwrw</string>
 </resources>
