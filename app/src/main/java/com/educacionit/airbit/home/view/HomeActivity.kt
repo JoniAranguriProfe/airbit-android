@@ -1,26 +1,40 @@
 package com.educacionit.airbit.home.view
 
-import android.content.Intent
+import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.educacionit.airbit.R
+import com.educacionit.airbit.base.common.MapsManager
 import com.educacionit.airbit.entities.Room
 import com.educacionit.airbit.home.contract.HomeContract
 import com.educacionit.airbit.home.model.HomeRepository
 import com.educacionit.airbit.home.presenter.HomePresenterImpl
-import com.educacionit.airbit.reservation.view.ReservationActivity
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class HomeActivity : AppCompatActivity(), HomeContract.HomeView {
+class HomeActivity : AppCompatActivity(), HomeContract.HomeView, OnMapReadyCallback {
     private lateinit var homePresenter: HomeContract.HomePresenter
+    private var googleMap: GoogleMap? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         initPresenter()
+        configureMaps()
+    }
 
-        val intent = Intent(this, ReservationActivity::class.java)
-        startActivity(intent)
+    private fun configureMaps() {
+        homePresenter.checkMapPreconditions(this)
+        val mapFragment =
+            supportFragmentManager.findFragmentById(R.id.main_map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
     }
 
     override fun initPresenter() {
@@ -31,7 +45,6 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView {
     override fun goToReservation(room: Room) {
         // TODO: Implement this later
     }
-
 
     override fun getViewContext() = this
 
@@ -45,11 +58,42 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView {
         // TODO: Implement this later
     }
 
-    override fun askForLocationPermissions() {
-        // TODO: Implement this later
+    override fun askForLocationPermissions(targetMapFeature: () -> Unit) {
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (!isGranted) {
+                showErrorMessage("Acaba de denegar el permiso de ubicacion")
+                return@registerForActivityResult
+            }
+            targetMapFeature.invoke()
+        }.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
     override fun centerUserInMap(userLocation: LatLng) {
-        // TODO: Implement this later
+        lifecycleScope.launch {
+            while(googleMap == null){
+                delay(200)
+            }
+           googleMap?.let {
+               MapsManager.centerUserInMap(it, userLocation)
+           }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun configureMapsSettings() {
+        lifecycleScope.launch {
+            while(googleMap == null){
+                delay(200)
+            }
+            googleMap?.isMyLocationEnabled = true
+        }
+    }
+
+    override fun showRoomsInMap(rooms: List<Room>) {
+        MapsManager.showRoomsInMap(this, googleMap, rooms)
+    }
+
+    override fun onMapReady(updatedGoogleMap: GoogleMap) {
+        googleMap = updatedGoogleMap
     }
 }
