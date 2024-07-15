@@ -11,6 +11,7 @@ interface HomeContract {
         // For Presenter usage
         fun goToReservation(room: Room)
         fun configureMapsSettings()
+        fun showRoomsInMap(rooms: List<Room>)
 
         // For internal usage
         fun configureMapZoomLevel(zoomLevel: Float)
@@ -22,7 +23,7 @@ interface HomeContract {
         // For View usage
         fun checkMapPreconditions(context: Context)
         suspend fun getCurrentLocation(): LatLng
-        fun getRoomsForPlace(location: Location): List<Room>
+        fun getRoomsForPlace(location: Location)
         fun saveRoomAsFavourite(room: Room)
 
         // For internal usage
@@ -31,7 +32,7 @@ interface HomeContract {
 
     interface HomeModel : BaseContract.BaseModel {
         suspend fun getCurrentLocation(): Location
-        fun getRoomsForPlace(location: Location): List<Room>
+        suspend fun getRoomsForPlace(location: Location): List<Room>
         fun saveRoomAsFavourite(room: Room)
         fun saveRoomsForOfflineMode(rooms: List<Room>)
     }

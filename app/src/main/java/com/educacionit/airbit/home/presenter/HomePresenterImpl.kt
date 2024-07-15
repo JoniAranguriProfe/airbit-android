@@ -22,8 +22,15 @@ class HomePresenterImpl(
     override fun checkMapPreconditions(context: Context) {
         val targetMapFeature: () -> Unit = {
             CoroutineScope(Dispatchers.Main).launch {
+                val currentLocation = getCurrentLocation()
                 view.configureMapsSettings()
-                view.centerUserInMap(getCurrentLocation())
+                view.centerUserInMap(currentLocation)
+                getRoomsForPlace(
+                    Location(
+                        currentLocation.latitude.toFloat(),
+                        currentLocation.longitude.toFloat()
+                    )
+                )
             }
         }
         when {
@@ -48,9 +55,13 @@ class HomePresenterImpl(
         homeModel.getCurrentLocation().toLatLng()
     }
 
-    override fun getRoomsForPlace(location: Location): List<Room> {
-        // TODO: Implement this later
-        return homeModel.getRoomsForPlace(location)
+    override fun getRoomsForPlace(location: Location) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val rooms = homeModel.getRoomsForPlace(location)
+            withContext(Dispatchers.Main) {
+                view.showRoomsInMap(rooms)
+            }
+        }
     }
 
     override fun saveRoomAsFavourite(room: Room) {

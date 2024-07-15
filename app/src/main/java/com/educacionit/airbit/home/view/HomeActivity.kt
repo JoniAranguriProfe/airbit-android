@@ -2,9 +2,7 @@ package com.educacionit.airbit.home.view
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -17,9 +15,7 @@ import com.educacionit.airbit.home.presenter.HomePresenterImpl
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.AdvancedMarkerOptions
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -91,6 +87,10 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, OnMapReadyCallb
             }
             googleMap?.isMyLocationEnabled = true
         }
+    }
+
+    override fun showRoomsInMap(rooms: List<Room>) {
+        MapsManager.showRoomsInMap(this, googleMap, rooms)
     }
 
     override fun onMapReady(updatedGoogleMap: GoogleMap) {
