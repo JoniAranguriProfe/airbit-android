@@ -52,6 +52,25 @@ class HomePresenterImpl(
         }
     }
 
+    override fun checkNotificationsPermissions(context: Context) {
+        when {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // Do nothing
+            }
+
+            ActivityCompat.shouldShowRequestPermissionRationale(
+                context as Activity, Manifest.permission.POST_NOTIFICATIONS
+            ) -> {
+                view.showErrorMessage("Necesitamos el permiso de notificaciones")
+            }
+
+            else -> view.askForNotificationPermissions()
+        }
+    }
+
     override suspend fun getCurrentLocation(): LatLng = withContext(Dispatchers.IO) {
         homeModel.getCurrentLocation().toLatLng()
     }

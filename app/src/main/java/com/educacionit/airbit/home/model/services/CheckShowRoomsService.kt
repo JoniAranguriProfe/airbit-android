@@ -36,9 +36,8 @@ class CheckShowRoomsService : Service(), CheckRoomsContract {
                             roomsVisible = true
                         }
                     }
+                    // Todo: Add a finish condition to avoid repeated notifications
                     if (!roomsVisible) {
-                        println("AIRBIT: Se detecto que no hay alojamientos visibles")
-                        // getCurrentRoomsListener.onLocationWithoutRooms(currentBounds.center)
                         createAndShowNotification()
                     }
                 }

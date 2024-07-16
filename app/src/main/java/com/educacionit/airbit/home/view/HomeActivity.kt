@@ -2,8 +2,10 @@ package com.educacionit.airbit.home.view
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.educacionit.airbit.R
@@ -28,6 +30,7 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, OnMapReadyCallb
 
         initPresenter()
         configureMaps()
+        homePresenter.checkNotificationsPermissions(this)
     }
 
     private fun configureMaps() {
@@ -68,21 +71,31 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, OnMapReadyCallb
         }.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    override fun askForNotificationPermissions() {
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (!isGranted) {
+                showErrorMessage("Acaba de denegar el permiso de notificaciones")
+                return@registerForActivityResult
+            }
+        }.launch(Manifest.permission.POST_NOTIFICATIONS)
+    }
+
     override fun centerUserInMap(userLocation: LatLng) {
         lifecycleScope.launch {
-            while(googleMap == null){
+            while (googleMap == null) {
                 delay(200)
             }
-           googleMap?.let {
-               MapsManager.centerUserInMap(it, userLocation)
-           }
+            googleMap?.let {
+                MapsManager.centerUserInMap(it, userLocation)
+            }
         }
     }
 
     @SuppressLint("MissingPermission")
     override fun configureMapsSettings() {
         lifecycleScope.launch {
-            while(googleMap == null){
+            while (googleMap == null) {
                 delay(200)
             }
             googleMap?.isMyLocationEnabled = true

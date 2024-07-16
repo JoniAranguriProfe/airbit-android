@@ -17,12 +17,14 @@ interface HomeContract {
         // For internal usage
         fun configureMapZoomLevel(zoomLevel: Float)
         fun askForLocationPermissions(targetMapFeature: () -> Unit)
+        fun askForNotificationPermissions()
         fun centerUserInMap(userLocation: LatLng)
     }
 
     interface HomePresenter : BaseContract.BasePresenter<HomeView> {
         // For View usage
         fun checkMapPreconditions(context: Context)
+        fun checkNotificationsPermissions(context: Context)
         suspend fun getCurrentLocation(): LatLng
         fun getRoomsForPlace(location: Location)
         fun saveRoomAsFavourite(room: Room)
