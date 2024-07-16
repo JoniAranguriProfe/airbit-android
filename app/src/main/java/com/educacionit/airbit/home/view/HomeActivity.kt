@@ -95,5 +95,11 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, OnMapReadyCallb
 
     override fun onMapReady(updatedGoogleMap: GoogleMap) {
         googleMap = updatedGoogleMap
+        googleMap?.let { homePresenter.startCheckingRooms(it) }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        homePresenter.tearDown(this)
     }
 }

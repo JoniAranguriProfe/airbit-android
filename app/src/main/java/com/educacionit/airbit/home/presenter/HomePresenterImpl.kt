@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import com.educacionit.airbit.entities.Location
 import com.educacionit.airbit.entities.Room
 import com.educacionit.airbit.home.contract.HomeContract
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -66,6 +67,14 @@ class HomePresenterImpl(
 
     override fun saveRoomAsFavourite(room: Room) {
         // TODO: Implement this later
+    }
+
+    override fun tearDown(context: Context) {
+        homeModel.tearDown(context)
+    }
+
+    override fun startCheckingRooms(googleMap: GoogleMap) {
+        homeModel.startCheckingRooms(googleMap)
     }
 
     override fun saveRoomsForOfflineMode(rooms: List<Room>) {

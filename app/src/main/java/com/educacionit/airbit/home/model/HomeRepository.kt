@@ -1,20 +1,53 @@
 package com.educacionit.airbit.home.model
 
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.os.IBinder
 import com.educacionit.airbit.entities.Location
 import com.educacionit.airbit.entities.Room
 import com.educacionit.airbit.home.contract.HomeContract
+import com.educacionit.airbit.home.model.services.CheckRoomsContract
+import com.educacionit.airbit.home.model.services.CheckShowRoomsService
+import com.educacionit.airbit.home.model.services.GetCurrentRoomsListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @SuppressLint("MissingPermission")
-class HomeRepository(context: Context) : HomeContract.HomeModel {
+class HomeRepository(context: Context) : HomeContract.HomeModel, GetCurrentRoomsListener {
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
     private var currentLocation: Location? = null
+    private var checkRoomsService: CheckRoomsContract? = null
+    private var currentRooms: List<Room> = emptyList()
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as CheckShowRoomsService.CheckShowRoomsBinder
+            checkRoomsService = binder.getService()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            checkRoomsService = null
+        }
+
+    }
+
+    init {
+        initCheckRoomsService(context)
+    }
+
+    private fun initCheckRoomsService(context: Context) {
+        val serviceIntent = Intent(context, CheckShowRoomsService::class.java)
+        context.bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
 
     @SuppressLint("MissingPermission")
     override suspend fun getCurrentLocation(): Location {
@@ -30,7 +63,7 @@ class HomeRepository(context: Context) : HomeContract.HomeModel {
     }
 
     override suspend fun getRoomsForPlace(location: Location): List<Room> {
-        return listOf(
+        currentRooms = listOf(
             Room(
                 id = 1,
                 name = "Unlam hostel",
@@ -152,6 +185,7 @@ class HomeRepository(context: Context) : HomeContract.HomeModel {
                 pricePerDay = 48.0f
             )
         )
+        return currentRooms
     }
 
     override fun saveRoomAsFavourite(room: Room) {
@@ -161,4 +195,25 @@ class HomeRepository(context: Context) : HomeContract.HomeModel {
     override fun saveRoomsForOfflineMode(rooms: List<Room>) {
         // TODO: Implement this later
     }
+
+    override fun startCheckingRooms(googleMap: GoogleMap) {
+        CoroutineScope(Dispatchers.Default).launch {
+            while (checkRoomsService == null) {
+                delay(200)
+            }
+            checkRoomsService?.apply {
+                setCurrentRoomsListener(this@HomeRepository)
+                checkRoomsShownToUser(googleMap)
+            }
+        }
+    }
+
+    override fun tearDown(context: Context) {
+        checkRoomsService?.let {
+            it.cancelCheckRooms()
+            context.unbindService(serviceConnection)
+        }
+    }
+
+    override fun getCurrentRooms() = currentRooms
 }
