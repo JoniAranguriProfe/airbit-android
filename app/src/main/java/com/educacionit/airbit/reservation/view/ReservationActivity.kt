@@ -1,5 +1,7 @@
 package com.educacionit.airbit.reservation.view
 
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +15,7 @@ import com.educacionit.airbit.home.view.HomeActivity.Companion.SELECTED_ROOM_EXT
 import com.educacionit.airbit.reservation.contract.ReservationContract
 import com.educacionit.airbit.reservation.entities.Reservation
 import com.educacionit.airbit.reservation.entities.RoomDetails
+import com.educacionit.airbit.reservation.model.InternetReceiver
 import com.educacionit.airbit.reservation.model.ReservationRepository
 import com.educacionit.airbit.reservation.presenter.ReservationPresenterImpl
 import com.educacionit.airbit.reservation.view.adapters.AmenitiesAdapter
@@ -28,6 +31,8 @@ class ReservationActivity : AppCompatActivity(), ReservationContract.Reservation
     private lateinit var ratingLabel: TextView
     private lateinit var roomRate: AppCompatRatingBar
     private lateinit var roomAmenitiesRecyclerView: RecyclerView
+    private var receiver: InternetReceiver? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +69,10 @@ class ReservationActivity : AppCompatActivity(), ReservationContract.Reservation
         val reservationModel: ReservationContract.ReservationModel = ReservationRepository()
         reservationPresenter =
             ReservationPresenterImpl(reservationModel = reservationModel, view = this)
+
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        receiver = InternetReceiver()
+        this.registerReceiver(receiver, filter)
     }
 
     override fun showSuccessReservationMessage(reservation: Reservation) {
@@ -89,5 +98,10 @@ class ReservationActivity : AppCompatActivity(), ReservationContract.Reservation
     override fun showNoInternetMessage() {
         // Todo: Implement logic to close the app
         showErrorMessage("Sin internet, desea salir?")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(receiver)
     }
 }

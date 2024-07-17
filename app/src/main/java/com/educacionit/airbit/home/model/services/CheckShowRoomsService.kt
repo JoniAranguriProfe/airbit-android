@@ -24,7 +24,6 @@ class CheckShowRoomsService : Service(), CheckRoomsContract {
     }
 
     override fun checkRoomsShownToUser(googleMap: GoogleMap) {
-        println("AIRBIT: Executing checkRoomsShownToUser")
         checkRoomsJob = CoroutineScope(Dispatchers.Main).launch {
             while (true) {
                 delay(500)
@@ -38,7 +37,7 @@ class CheckShowRoomsService : Service(), CheckRoomsContract {
                     }
                     // Todo: Add a finish condition to avoid repeated notifications
                     if (!roomsVisible) {
-                        createAndShowNotification()
+                       // createAndShowNotification()
                     }
                 }
             }

@@ -1,4 +1,4 @@
-package com.educacionit.airbit.home.model.broadcast
+package com.educacionit.airbit.reservation.model
 
 import android.content.BroadcastReceiver
 import android.content.Context
