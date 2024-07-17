@@ -32,7 +32,7 @@ class CheckShowRoomsService : Service(), CheckRoomsContract {
                 withContext(Dispatchers.Default) {
                     var roomsVisible = false
                     getCurrentRoomsListener.getCurrentRooms().forEach {
-                        if (currentBounds.contains(it.location)) {
+                        if (currentBounds.contains(it.location.toLatLng())) {
                             roomsVisible = true
                         }
                     }
