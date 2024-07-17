@@ -107,7 +107,7 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, OnMapReadyCallb
     override fun showRoomsInMap(rooms: List<Room>) {
         MapsManager.showRoomsInMap(this, googleMap, rooms) {
             val intent = Intent(this@HomeActivity, ReservationActivity::class.java)
-            intent.putExtra(SELECTED_ROOM, it)
+            intent.putExtra(SELECTED_ROOM_EXTRA, it)
             startActivity(intent)
         }
     }
@@ -123,6 +123,6 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, OnMapReadyCallb
     }
 
     companion object {
-        const val SELECTED_ROOM = "SELECTED_ROOM"
+        const val SELECTED_ROOM_EXTRA = "SELECTED_ROOM"
     }
 }
