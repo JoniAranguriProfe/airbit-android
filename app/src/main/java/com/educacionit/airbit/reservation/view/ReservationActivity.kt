@@ -1,15 +1,22 @@
 package com.educacionit.airbit.reservation.view
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.os.SystemClock
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.educacionit.airbit.R
+import com.educacionit.airbit.base.common.NotificationFactory
 import com.educacionit.airbit.entities.Room
 import com.educacionit.airbit.home.view.HomeActivity.Companion.SELECTED_ROOM_EXTRA
 import com.educacionit.airbit.reservation.contract.ReservationContract
@@ -47,6 +54,41 @@ class ReservationActivity : AppCompatActivity(), ReservationContract.Reservation
         initPresenter()
 
         configureViews()
+        configureReservationAlarm()
+    }
+
+    private fun configureReservationAlarm() {
+        val selfIntent = Intent(this, ReservationActivity::class.java)
+        // Todo: Validate why the extras are being deleted
+        selfIntent.putExtra(TITLE_EXTRA, "La sesión está por finalizar")
+        selfIntent.putExtra(CONTENT_EXTRA, "Realiza la reserva y recibe un descuento!")
+        selfIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+
+        val pendingIntent =
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmTargetTime = SystemClock.elapsedRealtime() + 3000
+        alarmManager.set(
+            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            alarmTargetTime,
+            pendingIntent
+        )
+    }
+
+    override fun onNewIntent(newIntent: Intent?) {
+        super.onNewIntent(newIntent)
+        newIntent?.extras?.apply {
+            val notificationTitle =
+                "La sesión está por finalizar"//getString(TITLE_EXTRA) ?: "No message"
+            val notificationContent =
+                "Realiza la reserva y recibe un descuento!" // getString(CONTENT_EXTRA) ?: ""
+            NotificationFactory.showNotification(
+                this@ReservationActivity,
+                notificationTitle,
+                notificationContent
+            )
+
+        }
     }
 
     private fun configureViews() {
@@ -103,5 +145,10 @@ class ReservationActivity : AppCompatActivity(), ReservationContract.Reservation
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(receiver)
+    }
+
+    companion object {
+        const val TITLE_EXTRA = "TITLE_EXTRA"
+        const val CONTENT_EXTRA = "CONTENT_EXTRA"
     }
 }
