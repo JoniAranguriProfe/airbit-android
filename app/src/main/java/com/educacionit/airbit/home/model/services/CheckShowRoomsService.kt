@@ -24,7 +24,6 @@ class CheckShowRoomsService : Service(), CheckRoomsContract {
     }
 
     override fun checkRoomsShownToUser(googleMap: GoogleMap) {
-        println("AIRBIT: Executing checkRoomsShownToUser")
         checkRoomsJob = CoroutineScope(Dispatchers.Main).launch {
             while (true) {
                 delay(500)
@@ -32,13 +31,13 @@ class CheckShowRoomsService : Service(), CheckRoomsContract {
                 withContext(Dispatchers.Default) {
                     var roomsVisible = false
                     getCurrentRoomsListener.getCurrentRooms().forEach {
-                        if (currentBounds.contains(it.location)) {
+                        if (currentBounds.contains(it.location.toLatLng())) {
                             roomsVisible = true
                         }
                     }
                     // Todo: Add a finish condition to avoid repeated notifications
                     if (!roomsVisible) {
-                        createAndShowNotification()
+                       // createAndShowNotification()
                     }
                 }
             }

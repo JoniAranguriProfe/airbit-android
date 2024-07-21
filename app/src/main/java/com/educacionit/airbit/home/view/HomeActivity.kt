@@ -2,6 +2,7 @@ package com.educacionit.airbit.home.view
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,6 +15,7 @@ import com.educacionit.airbit.entities.Room
 import com.educacionit.airbit.home.contract.HomeContract
 import com.educacionit.airbit.home.model.HomeRepository
 import com.educacionit.airbit.home.presenter.HomePresenterImpl
+import com.educacionit.airbit.reservation.view.ReservationActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -103,7 +105,11 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, OnMapReadyCallb
     }
 
     override fun showRoomsInMap(rooms: List<Room>) {
-        MapsManager.showRoomsInMap(this, googleMap, rooms)
+        MapsManager.showRoomsInMap(this, googleMap, rooms) {
+            val intent = Intent(this@HomeActivity, ReservationActivity::class.java)
+            intent.putExtra(SELECTED_ROOM_EXTRA, it)
+            startActivity(intent)
+        }
     }
 
     override fun onMapReady(updatedGoogleMap: GoogleMap) {
@@ -114,5 +120,9 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, OnMapReadyCallb
     override fun onDestroy() {
         super.onDestroy()
         homePresenter.tearDown(this)
+    }
+
+    companion object {
+        const val SELECTED_ROOM_EXTRA = "SELECTED_ROOM"
     }
 }

@@ -67,121 +67,121 @@ class HomeRepository(context: Context) : HomeContract.HomeModel, GetCurrentRooms
             Room(
                 id = 1,
                 name = "Unlam hostel",
-                location = LatLng(-34.670629, -58.562965),
+                location = Location(-34.670629f, -58.562965f),
                 pricePerDay = 45.5f
             ),
             Room(
                 id = 2,
                 name = "Casa de Juan",
-                location = LatLng(-34.668000, -58.564000),
+                location = Location(-34.668000f, -58.564000f),
                 pricePerDay = 50.0f
             ),
             Room(
                 id = 3,
                 name = "Hospedaje María",
-                location = LatLng(-34.669500, -58.560000),
+                location = Location(-34.669500f, -58.560000f),
                 pricePerDay = 40.0f
             ),
             Room(
                 id = 4,
                 name = "Pensión Los Robles",
-                location = LatLng(-34.672000, -58.563000),
+                location = Location(-34.672000f, -58.563000f),
                 pricePerDay = 55.0f
             ),
             Room(
                 id = 5,
                 name = "Hotel El Sol",
-                location = LatLng(-34.671000, -58.565000),
+                location = Location(-34.671000f, -58.565000f),
                 pricePerDay = 60.0f
             ),
             Room(
                 id = 6,
                 name = "Residencia La Luna",
-                location = LatLng(-34.669000, -58.566000),
+                location = Location(-34.669000f, -58.566000f),
                 pricePerDay = 45.0f
             ),
             Room(
                 id = 7,
                 name = "Albergue La Estrella",
-                location = LatLng(-34.670000, -58.561000),
+                location = Location(-34.670000f, -58.561000f),
                 pricePerDay = 48.0f
             ),
             Room(
                 id = 8,
                 name = "Motel Las Flores",
-                location = LatLng(-34.668500, -58.562500),
+                location = Location(-34.668500f, -58.562500f),
                 pricePerDay = 42.0f
             ),
             Room(
                 id = 9,
                 name = "Hostal Las Palmas",
-                location = LatLng(-34.671500, -58.564500),
+                location = Location(-34.671500f, -58.564500f),
                 pricePerDay = 50.0f
             ),
             Room(
                 id = 10,
                 name = "Casa de Pedro",
-                location = LatLng(-34.669500, -58.563500),
+                location = Location(-34.669500f, -58.563500f),
                 pricePerDay = 47.0f
             ),
             Room(
                 id = 11,
                 name = "Hospedaje El Roble",
-                location = LatLng(-34.670500, -58.562000),
+                location = Location(-34.670500f, -58.562000f),
                 pricePerDay = 52.0f
             ),
             Room(
                 id = 12,
                 name = "Pensión Las Margaritas",
-                location = LatLng(-34.668800, -58.565800),
+                location = Location(-34.668800f, -58.565800f),
                 pricePerDay = 53.0f
             ),
             Room(
                 id = 13,
                 name = "Hotel El Paraíso",
-                location = LatLng(-34.670200, -58.561500),
+                location = Location(-34.670200f, -58.561500f),
                 pricePerDay = 49.0f
             ),
             Room(
                 id = 14,
                 name = "Residencia El Bosque",
-                location = LatLng(-34.669300, -58.566300),
+                location = Location(-34.669300f, -58.566300f),
                 pricePerDay = 51.0f
             ),
             Room(
                 id = 15,
                 name = "Albergue El Río",
-                location = LatLng(-34.670800, -58.564800),
+                location = Location(-34.670800f, -58.564800f),
                 pricePerDay = 46.0f
             ),
             Room(
                 id = 16,
                 name = "Motel La Cascada",
-                location = LatLng(-34.668200, -58.562200),
+                location = Location(-34.668200f, -58.562200f),
                 pricePerDay = 44.0f
             ),
             Room(
                 id = 17,
                 name = "Hostal El Jardín",
-                location = LatLng(-34.671200, -58.563700),
+                location = Location(-34.671200f, -58.563700f),
                 pricePerDay = 55.0f
             ),
             Room(
                 id = 18,
                 name = "Casa de Ana",
-                location = LatLng(-34.669800, -58.564200),
+                location = Location(-34.669800f, -58.564200f),
                 pricePerDay = 50.0f
             ),
             Room(
                 id = 19,
                 name = "Hospedaje Los Arcos",
-                location = LatLng(-34.670400, -58.562600),
+                location = Location(-34.670400f, -58.562600f),
                 pricePerDay = 52.0f
             ),
             Room(
                 id = 20,
                 name = "Pensión La Sierra",
-                location = LatLng(-34.668700, -58.563300),
+                location = Location(-34.668700f, -58.563300f),
                 pricePerDay = 48.0f
             )
         )
