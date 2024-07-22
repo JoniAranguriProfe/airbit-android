@@ -109,6 +109,7 @@ class HomeActivity : AppCompatActivity(), HomeContract.HomeView, OnMapReadyCallb
             val intent = Intent(this@HomeActivity, ReservationActivity::class.java)
             intent.putExtra(SELECTED_ROOM_EXTRA, it)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_from_bottom, 0)
         }
     }
 
