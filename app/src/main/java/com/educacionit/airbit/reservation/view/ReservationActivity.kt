@@ -17,19 +17,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.educacionit.airbit.R
 import com.educacionit.airbit.base.common.NotificationFactory
+import com.educacionit.airbit.entities.Adult
+import com.educacionit.airbit.entities.Child
+import com.educacionit.airbit.entities.Guest
 import com.educacionit.airbit.entities.Room
 import com.educacionit.airbit.home.view.HomeActivity.Companion.SELECTED_ROOM_EXTRA
 import com.educacionit.airbit.reservation.contract.ReservationContract
+import com.educacionit.airbit.reservation.entities.DateInterval
 import com.educacionit.airbit.reservation.entities.Reservation
 import com.educacionit.airbit.reservation.entities.RoomDetails
 import com.educacionit.airbit.reservation.model.InternetReceiver
 import com.educacionit.airbit.reservation.model.ReservationRepository
 import com.educacionit.airbit.reservation.presenter.ReservationPresenterImpl
 import com.educacionit.airbit.reservation.view.adapters.AmenitiesAdapter
+import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
+import java.util.Date
 import kotlin.math.roundToInt
 
 class ReservationActivity : AppCompatActivity(), ReservationContract.ReservationView {
+    private var currentRoom: Room? = null
     private lateinit var roomAmenitiesAdapter: AmenitiesAdapter
     private lateinit var reservationPresenter: ReservationContract.ReservationPresenter
     private lateinit var roomTitle: TextView
@@ -38,6 +45,7 @@ class ReservationActivity : AppCompatActivity(), ReservationContract.Reservation
     private lateinit var ratingLabel: TextView
     private lateinit var roomRate: AppCompatRatingBar
     private lateinit var roomAmenitiesRecyclerView: RecyclerView
+    private lateinit var reservationButton: MaterialButton
     private var receiver: InternetReceiver? = null
 
 
@@ -50,6 +58,8 @@ class ReservationActivity : AppCompatActivity(), ReservationContract.Reservation
         ratingLabel = findViewById(R.id.rating_label)
         roomRate = findViewById(R.id.room_rate)
         roomAmenitiesRecyclerView = findViewById(R.id.room_amenities)
+        reservationButton = findViewById(R.id.reservation_button)
+        currentRoom = intent.extras?.getSerializable(SELECTED_ROOM_EXTRA) as? Room
 
         initPresenter()
 
@@ -97,7 +107,7 @@ class ReservationActivity : AppCompatActivity(), ReservationContract.Reservation
             LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         roomAmenitiesRecyclerView.adapter = roomAmenitiesAdapter
 
-        (intent.extras?.getSerializable(SELECTED_ROOM_EXTRA) as? Room)?.apply {
+        currentRoom?.apply {
             roomTitle.text = name
             roomPriceNight.text = pricePerDay.toString()
 
@@ -105,6 +115,28 @@ class ReservationActivity : AppCompatActivity(), ReservationContract.Reservation
                 reservationPresenter.getRoomDetails(id)
             }
         }
+
+        reservationButton.setOnClickListener {
+            currentRoom?.let {
+                val guests = getMockedGuestsFromInput()
+                val dateInterval = getReservationInterval()
+                reservationPresenter.makeReservation(guests, dateInterval, it)
+            } ?: Toast.makeText(
+                this,
+                "No se pudo obtener la información del alojamiento!",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun getReservationInterval(): DateInterval {
+        // Todo: Implement real logic
+        return DateInterval(checkInDate = Date(2024, 7, 12), checkOutDate = Date(2024, 7, 14))
+    }
+
+    private fun getMockedGuestsFromInput(): List<Guest> {
+        // Todo: Implement real logic
+        return listOf(Guest(Adult), Guest(Adult), Guest(Child))
     }
 
     override fun initPresenter() {
@@ -118,7 +150,13 @@ class ReservationActivity : AppCompatActivity(), ReservationContract.Reservation
     }
 
     override fun showSuccessReservationMessage(reservation: Reservation) {
-        // TODO: Implement this later
+        NotificationFactory.showNotification(
+            this,
+            "Reserva confirmada!",
+            "Se confirmó la reserva para tu estadía por solo $${reservation.price}"
+        )
+
+        finish()
     }
 
     override fun onRoomDetailsSuccess(roomDetails: RoomDetails) {

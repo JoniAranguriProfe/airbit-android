@@ -7,7 +7,8 @@ import com.educacionit.airbit.reservation.entities.DateInterval
 import com.educacionit.airbit.reservation.entities.Reservation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.time.Duration
+import java.util.concurrent.TimeUnit
+
 
 class ReservationPresenterImpl(
     val reservationModel: ReservationContract.ReservationModel,
@@ -31,12 +32,17 @@ class ReservationPresenterImpl(
             price = totalPrice,
             guests = guests
         )
-        reservationModel.makeReservation(reservation)
+        val reservationSucceed = reservationModel.makeReservation(reservation)
+        if (reservationSucceed) {
+            view.showSuccessReservationMessage(reservation)
+        } else {
+            view.showErrorMessage("No se pudo realizar la reserva, intente nuevamente!")
+        }
     }
 
     private fun getReservationTotalPrice(room: Room, dateInterval: DateInterval): Float {
-        // TODO: Implement this later
-        val days = 10
+        val diff: Long = dateInterval.checkOutDate.time - dateInterval.checkInDate.time
+        val days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
         return room.pricePerDay * days
     }
 
@@ -53,7 +59,7 @@ class ReservationPresenterImpl(
     }
 
     override suspend fun getRoomDetails(roomId: Int) {
-        val reservationDetails =  withContext(Dispatchers.Main){
+        val reservationDetails = withContext(Dispatchers.Main) {
             reservationModel.getRoomDetails(roomId)
         }
         view.onRoomDetailsSuccess(reservationDetails)
