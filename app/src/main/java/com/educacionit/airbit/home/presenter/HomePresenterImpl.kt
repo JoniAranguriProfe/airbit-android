@@ -11,6 +11,7 @@ import com.educacionit.airbit.entities.Room
 import com.educacionit.airbit.home.contract.HomeContract
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,7 +19,8 @@ import kotlinx.coroutines.withContext
 
 class HomePresenterImpl(
     val homeModel: HomeContract.HomeModel,
-    override val view: HomeContract.HomeView
+    override val view: HomeContract.HomeView,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : HomeContract.HomePresenter {
     override fun checkMapPreconditions(context: Context) {
         val targetMapFeature: () -> Unit = {
@@ -71,12 +73,12 @@ class HomePresenterImpl(
         }
     }
 
-    override suspend fun getCurrentLocation(): LatLng = withContext(Dispatchers.IO) {
+    override suspend fun getCurrentLocation(): LatLng = withContext(dispatcher) {
         homeModel.getCurrentLocation().toLatLng()
     }
 
     override fun getRoomsForPlace(location: Location) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(dispatcher).launch {
             val rooms = homeModel.getRoomsForPlace(location)
             withContext(Dispatchers.Main) {
                 view.showRoomsInMap(rooms)
